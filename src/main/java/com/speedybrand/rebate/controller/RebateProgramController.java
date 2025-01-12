@@ -3,6 +3,7 @@ package com.speedybrand.rebate.controller;
 import com.speedybrand.rebate.models.requests.RebateProgramRequest;
 import com.speedybrand.rebate.models.responses.RebateCalculation;
 import com.speedybrand.rebate.models.responses.RebateProgramResponse;
+import com.speedybrand.rebate.utils.CommonUtil;
 import com.speedybrand.rebate.pojo.RebateProgram;
 import com.speedybrand.rebate.service.RebateProgramService;
 import org.apache.commons.lang.StringUtils;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-import static com.speedybrand.rebate.pojo.Constants.REBATE_PROGRAM_ID;
 
 @RestController("rebateProgramController")
 @RequestMapping(RebateProgramController.ROOT_PATH)
@@ -49,7 +49,7 @@ public class RebateProgramController {
 
         final RebateProgram rebateProgram = service.createRebateProgram(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header(REBATE_PROGRAM_ID, rebateProgram.getId())
+                .header(CommonUtil.ID, rebateProgram.getId())
                 .body(RebateProgramResponse.from(rebateProgram));
     }
 

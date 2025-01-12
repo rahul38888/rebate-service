@@ -14,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-
-import static com.speedybrand.rebate.pojo.Constants.REBATE_PROGRAM_ID;
 import static com.speedybrand.rebate.utils.CommonUtil.enrichTransaction;
 
 @Repository

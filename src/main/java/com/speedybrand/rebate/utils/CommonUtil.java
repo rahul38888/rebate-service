@@ -6,10 +6,13 @@ import com.speedybrand.rebate.pojo.Transaction;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
-import java.util.UUID;
 
 public class CommonUtil {
+//2024-01-13T00:04:01.546+00:00
+    public static final String ID = "_id";
+    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private CommonUtil() {
     }
@@ -35,5 +38,13 @@ public class CommonUtil {
     public static void enrichRebateProgram(final RebateProgram rebateProgram) {
         rebateProgram.setId(IdGenerator.generateRebateProgramId());
         rebateProgram.setCreatedAt(LocalDateTime.now());
+    }
+
+    public static LocalDateTime parseLocalDateTime(final String stringTime) {
+        return LocalDateTime.parse(stringTime, TIME_FORMATTER);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseLocalDateTime("2024-01-13T00:04:01.546+00:00"));
     }
 }
