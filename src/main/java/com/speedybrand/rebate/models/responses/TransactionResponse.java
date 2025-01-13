@@ -1,5 +1,6 @@
 package com.speedybrand.rebate.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.speedybrand.rebate.models.TransactionModel;
 import com.speedybrand.rebate.pojo.Transaction;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionResponse extends TransactionModel implements Serializable {
 
     private final LocalDateTime recordedAt;
@@ -30,5 +32,11 @@ public class TransactionResponse extends TransactionModel implements Serializabl
                 .rebateProgramId(transaction.getRebateProgramId())
                 .recordedAt(transaction.getRecordedAt())
                 .build();
+    }
+
+    public static class Constant {
+        private Constant() {}
+
+        public static final String RECORDED_AT = "recordedAt";
     }
 }

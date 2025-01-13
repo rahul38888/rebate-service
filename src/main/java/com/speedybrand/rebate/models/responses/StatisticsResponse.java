@@ -1,5 +1,6 @@
 package com.speedybrand.rebate.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.speedybrand.rebate.pojo.Statistics;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StatisticsResponse implements Serializable {
     private Double total;
     private Integer count;
@@ -26,5 +28,12 @@ public class StatisticsResponse implements Serializable {
                 .total(statistics.getTotal())
                 .count(statistics.getCount())
                 .build();
+    }
+
+    static class Constant {
+        private Constant() {}
+
+        public static final String TOTAL = "total";
+        public static final String COUNT = "count";
     }
 }

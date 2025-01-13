@@ -4,17 +4,19 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.speedybrand.rebate.repo.mongodb.common.codecs.ClaimStatusCodec;
+import com.speedybrand.rebate.repo.mongodb.codecs.ClaimStatusCodec;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfig {
 
-    private static final String connectionString = "mongodb://localhost:27017/";
+    @Autowired
+    private MongoDbConfiguration configuration;
 
     @Bean
     public MongoClient mongoClient() {
@@ -26,7 +28,7 @@ public class ApplicationConfig {
                         MongoClientSettings.getDefaultCodecRegistry(),
                         pojoCodecRegistry);
         final MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(connectionString))
+                .applyConnectionString(new ConnectionString(configuration.getConnectionString()))
                 .codecRegistry(codecRegistry)
                 .build();
         return MongoClients.create(settings);

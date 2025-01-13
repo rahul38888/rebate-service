@@ -1,5 +1,6 @@
 package com.speedybrand.rebate.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.speedybrand.rebate.models.RebateProgramModel;
 import com.speedybrand.rebate.pojo.RebateProgram;
 import lombok.Getter;
@@ -12,9 +13,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RebateProgramResponse extends RebateProgramModel implements Serializable {
 
-    private String id;
+    private final String id;
     private final LocalDateTime createdAt;
 
     public RebateProgramResponse(final String programName, final Double rebatePercentage, final LocalDateTime startDate,
@@ -35,5 +37,12 @@ public class RebateProgramResponse extends RebateProgramModel implements Seriali
                 .eligibilityCriteria(rebateProgram.getEligibilityCriteria())
                 .createdAt(rebateProgram.getCreatedAt())
                 .build();
+    }
+
+    public static class Constant {
+        private Constant() {}
+
+        public static final String ID = "id";
+        public static final String CREATED_AT = "createdAt";
     }
 }

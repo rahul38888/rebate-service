@@ -6,6 +6,8 @@ import com.speedybrand.rebate.pojo.Statistics;
 import com.speedybrand.rebate.pojo.ClaimStatus;
 import com.speedybrand.rebate.repo.IClaimRepo;
 import com.speedybrand.rebate.service.IReportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 @Service
 public class ReportService implements IReportService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
     private final IClaimRepo claimRepo;
 
@@ -29,8 +32,7 @@ public class ReportService implements IReportService {
 
         final Map<ClaimStatus, StatisticsResponse> claimStatsMap = new HashMap<>();
         final StatisticsResponse overalls = StatisticsResponse.builder()
-                .total(0D)
-                .count(0).build();
+                .total(0D).count(0).build();
 
         claimStats.forEach(statistics -> {
             claimStatsMap.put(statistics.getStatus(), StatisticsResponse.from(statistics));
@@ -41,6 +43,7 @@ public class ReportService implements IReportService {
         return ClaimReportResponse.builder()
                 .grouped(claimStatsMap)
                 .overall(overalls)
+                .from(from).to(to)
                 .build();
     }
 

@@ -4,12 +4,13 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.Filters;
 import com.speedybrand.rebate.pojo.RebateProgram;
 import com.speedybrand.rebate.repo.IRebateProgramRepo;
-import com.speedybrand.rebate.repo.mongodb.common.MongoDbRepository;
 import com.speedybrand.rebate.repo.mongodb.condition.MongoDbEnabled;
+import com.speedybrand.rebate.repo.mongodb.config.MongoDbConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Repository;
 
+import static com.speedybrand.rebate.utils.CommonUtil.ID;
 import static com.speedybrand.rebate.utils.CommonUtil.enrichRebateProgram;
 
 @Repository
@@ -17,13 +18,13 @@ import static com.speedybrand.rebate.utils.CommonUtil.enrichRebateProgram;
 public class MongoDbRebateProgramRepo extends MongoDbRepository<RebateProgram> implements IRebateProgramRepo {
 
     @Autowired
-    public MongoDbRebateProgramRepo(final MongoClient client) {
-        super(client, "rebate-service", "rebate-programs", RebateProgram.class);
+    public MongoDbRebateProgramRepo(final MongoClient client, final MongoDbConfiguration configuration) {
+        super(client, configuration.getDatabaseName(), configuration.getRebateProgramCollection(), RebateProgram.class);
     }
 
     @Override
     public RebateProgram get(final String rebateProgramId) {
-        return collection.find(Filters.eq("_id", rebateProgramId), RebateProgram.class).first();
+        return collection.find(Filters.eq(ID, rebateProgramId), RebateProgram.class).first();
     }
 
     @Override

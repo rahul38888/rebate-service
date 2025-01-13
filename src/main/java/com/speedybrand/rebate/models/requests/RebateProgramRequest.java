@@ -17,4 +17,5 @@ public class RebateProgramRequest extends RebateProgramModel implements Serializ
                                 final LocalDateTime endDate, final String eligibilityCriteria) {
         super(programName, rebatePercentage, startDate, endDate, eligibilityCriteria);
     }
+
 }

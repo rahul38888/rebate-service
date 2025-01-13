@@ -1,15 +1,11 @@
 package com.speedybrand.rebate.repo.mongodb;
 
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.Filters;
-import com.speedybrand.rebate.pojo.RebateProgram;
 import com.speedybrand.rebate.pojo.Transaction;
-import com.speedybrand.rebate.repo.IRebateProgramRepo;
 import com.speedybrand.rebate.repo.ITransactionRepo;
-import com.speedybrand.rebate.repo.mongodb.common.MongoDbRepository;
 import com.speedybrand.rebate.repo.mongodb.condition.MongoDbEnabled;
+import com.speedybrand.rebate.repo.mongodb.config.MongoDbConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Repository;
@@ -21,8 +17,8 @@ import static com.speedybrand.rebate.utils.CommonUtil.enrichTransaction;
 public class MongoDbTransactionRepo extends MongoDbRepository<Transaction> implements ITransactionRepo {
 
     @Autowired
-    public MongoDbTransactionRepo(final MongoClient client) {
-        super(client, "rebate-service", "transactions", Transaction.class);
+    public MongoDbTransactionRepo(final MongoClient client, final MongoDbConfiguration configuration) {
+        super(client, configuration.getDatabaseName(), configuration.getTransactionCollection(), Transaction.class);
     }
 
     @Override

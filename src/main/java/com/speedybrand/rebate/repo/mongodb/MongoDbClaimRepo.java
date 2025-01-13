@@ -9,8 +9,8 @@ import com.speedybrand.rebate.pojo.Claim;
 import com.speedybrand.rebate.pojo.ClaimStatus;
 import com.speedybrand.rebate.pojo.Statistics;
 import com.speedybrand.rebate.repo.IClaimRepo;
-import com.speedybrand.rebate.repo.mongodb.common.MongoDbRepository;
 import com.speedybrand.rebate.repo.mongodb.condition.MongoDbEnabled;
+import com.speedybrand.rebate.repo.mongodb.config.MongoDbConfiguration;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,11 @@ import java.util.*;
 @Conditional(MongoDbEnabled.class)
 public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaimRepo {
 
+    private static final String DOLLAR = "$";
+
     @Autowired
-    public MongoDbClaimRepo(final MongoClient client) {
-        super(client, "rebate-service", "claims", Claim.class);
+    public MongoDbClaimRepo(final MongoClient client, final MongoDbConfiguration configuration) {
+        super(client, configuration.getDatabaseName(), configuration.getClaimsCollection(), Claim.class);
     }
 
     @Override
@@ -37,11 +39,11 @@ public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaim
 
     @Override
     public List<Statistics> getClaimAggregationReport(final LocalDateTime from, final LocalDateTime to) {
-        final Bson match = Aggregates.match(Filters.and(Filters.gte("claimDate", from),
-                Filters.lte("claimDate", to)));
-        final Bson group = Aggregates.group("$status",
-                Accumulators.sum("total", "$claimAmount"),
-                Accumulators.sum("count", 1));
+        final Bson match = Aggregates.match(Filters.and(Filters.gte(Claim.DbConstant.CLAIM_DATE, from),
+                Filters.lte(Claim.DbConstant.CLAIM_DATE, to)));
+        final Bson group = Aggregates.group(DOLLAR + Claim.DbConstant.STATUS,
+                Accumulators.sum(Statistics.DbConstant.TOTAL, DOLLAR + Claim.DbConstant.CLAIM_AMOUNT),
+                Accumulators.sum(Statistics.DbConstant.COUNT, 1));
 
         final List<Bson> aggregateQuery = Arrays.asList(match, group);
         final AggregateIterable<Document> response = collection.aggregate(aggregateQuery, Document.class);
@@ -49,9 +51,9 @@ public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaim
         final List<Statistics> result = new ArrayList<>();
         response.forEach(doc -> {
             final Statistics status = Statistics.builder()
-                    .status(ClaimStatus.from(doc.getInteger("_id")))
-                    .total(doc.getDouble("total"))
-                    .count(doc.getInteger("count"))
+                    .status(ClaimStatus.from(doc.getInteger(Statistics.DbConstant.ID)))
+                    .total(doc.getDouble(Statistics.DbConstant.TOTAL))
+                    .count(doc.getInteger(Statistics.DbConstant.COUNT))
                     .build();
             result.add(status);
         });

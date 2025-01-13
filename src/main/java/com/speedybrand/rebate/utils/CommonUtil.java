@@ -10,9 +10,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 public class CommonUtil {
-//2024-01-13T00:04:01.546+00:00
+
     public static final String ID = "_id";
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    public static final String REBATE_PROGRAM_ID = "rebateProgramId";
+    public static final String TRANSACTION_ID = "transactionId";
 
     private CommonUtil() {
     }

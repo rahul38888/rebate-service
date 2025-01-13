@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mongodb:
+    image: mongo:6-jammy
+    hostname: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - rebate-service-network
+  rebate-service:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT_NAME=dev
+      - CONNECTION_STRING=mongodb://mongo:27017/
+    networks:
+      - rebate-service-network
+
+networks:
+  rebate-service-network:
+    driver: bridge
