@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "6ece13b6-e432-41c6-b56d-06a51ac270bf",
+		"name": "speedybrand",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3059445"
+	},
+	"item": [
+		{
+			"name": "Rebate",
+			"item": [
+				{
+					"name": "Create a new rebate program",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"REBATE_PROGRAM_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"programName\": \"Diwali offer\",\r\n    \"rebatePercentage\": 0.7,\r\n    \"startDate\": \"2024-02-12T14:10:09\",\r\n    \"endDate\": \"2025-06-12T14:10:09\",\r\n    \"eligibilityCriteria\": \"age\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/rebate/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rebate",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get rebate program by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/rebate/:rebate_program_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rebate",
+								":rebate_program_id"
+							],
+							"variable": [
+								{
+									"key": "rebate_program_id",
+									"value": "{{REBATE_PROGRAM_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate rebate amount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/rebate/calculate/:transaction_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rebate",
+								"calculate",
+								":transaction_id"
+							],
+							"variable": [
+								{
+									"key": "transaction_id",
+									"value": "{{TRANSACTION_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Record a new Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"TRANSACTION_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"arn:txn:{{$randomUUID}}\",\r\n    \"amount\": 2025.0,\r\n    \"transactionDate\": \"2024-06-12T14:10:09\",\r\n    \"rebateProgramId\": \"{{REBATE_PROGRAM_ID}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/transaction/record",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"transaction",
+								"record"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Claim",
+			"item": [
+				{
+					"name": "Create new claim",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/claim/create?tid={{TRANSACTION_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"claim",
+								"create"
+							],
+							"query": [
+								{
+									"key": "tid",
+									"value": "{{TRANSACTION_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get claim",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/claim/:claimId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"claim",
+								":claimId"
+							],
+							"variable": [
+								{
+									"key": "claimId",
+									"value": "{{CLAIM_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Claim",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/claim/:claimId/approve",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"claim",
+								":claimId",
+								"approve"
+							],
+							"variable": [
+								{
+									"key": "claimId",
+									"value": "{{CLAIM_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Claim",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"First request\", function() {\r",
+									"    let headerValue = pm.response.headers.get(\"id\");\r",
+									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/claim/:claimId/reject",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"claim",
+								":claimId",
+								"reject"
+							],
+							"variable": [
+								{
+									"key": "claimId",
+									"value": "{{CLAIM_ID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reporting",
+			"item": [
+				{
+					"name": "Claim Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/report/claims?from=2024-01-13T00%3A04%3A01.546%2B00%3A00&to=2025-08-14T05%3A57%3A09.632%2B00%3A00",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"report",
+								"claims"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "2024-01-13T00%3A04%3A01.546%2B00%3A00"
+								},
+								{
+									"key": "to",
+									"value": "2025-08-14T05%3A57%3A09.632%2B00%3A00"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
