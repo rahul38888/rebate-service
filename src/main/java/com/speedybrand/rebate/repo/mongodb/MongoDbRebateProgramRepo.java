@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Repository;
 
-import static com.speedybrand.rebate.utils.CommonUtil.ID;
 import static com.speedybrand.rebate.utils.CommonUtil.enrichRebateProgram;
 
 @Repository
@@ -24,7 +23,7 @@ public class MongoDbRebateProgramRepo extends MongoDbRepository<RebateProgram> i
 
     @Override
     public RebateProgram get(final String rebateProgramId) {
-        return collection.find(Filters.eq(ID, rebateProgramId), RebateProgram.class).first();
+        return collection.find(Filters.eq(RebateProgram.DbConstant.ID, rebateProgramId), RebateProgram.class).first();
     }
 
     @Override

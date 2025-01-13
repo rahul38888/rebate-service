@@ -11,10 +11,10 @@ import java.util.TimeZone;
 
 public class CommonUtil {
 
-    public static final String ID = "_id";
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     public static final String REBATE_PROGRAM_ID = "rebateProgramId";
     public static final String TRANSACTION_ID = "transactionId";
+    public static final String CLAIM_ID = "claimId";
 
     private CommonUtil() {
     }

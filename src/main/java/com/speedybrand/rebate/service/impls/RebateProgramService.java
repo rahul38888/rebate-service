@@ -39,7 +39,7 @@ public class RebateProgramService implements IRebateProgramService {
             LOGGER.error("Invalid rebate program id, id = {}", rebateProgramId);
             throw new EntityNotFoundException(Map.of(CommonUtil.REBATE_PROGRAM_ID, rebateProgramId), null);
         }
-        return rebateProgramRepo.get(rebateProgramId);
+        return rebateProgram;
     }
 
     @Override

@@ -44,7 +44,9 @@ public class RebateProgramController {
     public ResponseEntity<UniversalResponse<RebateProgramResponse>> getRebateProgram(@PathVariable final String rebateProgramId) {
         try {
             final RebateProgram rebateProgram = service.getRebateProgram(rebateProgramId);
-            return ResponseEntity.ok(new UniversalResponse<>(RebateProgramResponse.from(rebateProgram)));
+            return ResponseEntity.status(HttpStatus.OK).
+                    header(RebateProgramResponse.Constant.ID, rebateProgram.getId()).
+                    body(new UniversalResponse<>(RebateProgramResponse.from(rebateProgram)));
         }
         catch (final RebateServiceException ex) {
             LOGGER.error("Exception during getRebateProgram call", ex);

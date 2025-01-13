@@ -41,7 +41,7 @@ public class RebateProgram {
         return result;
     }
 
-    static class DbConstant {
+    public static class DbConstant {
         private DbConstant() {}
 
 

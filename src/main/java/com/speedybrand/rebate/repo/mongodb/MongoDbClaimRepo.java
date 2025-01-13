@@ -1,10 +1,12 @@
 package com.speedybrand.rebate.repo.mongodb;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import com.speedybrand.rebate.pojo.Claim;
 import com.speedybrand.rebate.pojo.ClaimStatus;
 import com.speedybrand.rebate.pojo.Statistics;
@@ -32,9 +34,25 @@ public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaim
     }
 
     @Override
+    public Claim get(final String claimId) {
+        return collection.find(Filters.eq(Claim.DbConstant.ID, claimId), Claim.class).first();
+    }
+
+    @Override
     public Claim create(final Claim claim) {
         collection.insertOne(claim);
         return claim;
+    }
+
+    @Override
+    public boolean updateProperties(final Bson filter, Map<String, Object> updates) {
+        final BasicDBObject update = new BasicDBObject ();
+        updates.forEach(update::append);
+        final BasicDBObject setQuery = new BasicDBObject();
+        setQuery.append("$set", update);
+
+        final UpdateResult res = collection.updateOne(filter, setQuery);
+        return (res.getMatchedCount() > 0) && (res.getModifiedCount() > 0);
     }
 
     @Override
