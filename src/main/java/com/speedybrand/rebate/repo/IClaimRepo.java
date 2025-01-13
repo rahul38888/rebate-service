@@ -10,5 +10,5 @@ public interface IClaimRepo {
 
     Claim create(final Claim claim);
 
-    List<Statistics> getClaimAggrigattionReport(final LocalDateTime from, final LocalDateTime to);
+    List<Statistics> getClaimAggregationReport(final LocalDateTime from, final LocalDateTime to);
 }

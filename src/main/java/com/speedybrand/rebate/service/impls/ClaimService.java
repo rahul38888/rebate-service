@@ -1,4 +1,4 @@
-package com.speedybrand.rebate.service;
+package com.speedybrand.rebate.service.impls;
 
 import com.speedybrand.rebate.pojo.Claim;
 import com.speedybrand.rebate.pojo.ClaimStatus;
@@ -7,14 +7,14 @@ import com.speedybrand.rebate.pojo.Transaction;
 import com.speedybrand.rebate.repo.IClaimRepo;
 import com.speedybrand.rebate.repo.IRebateProgramRepo;
 import com.speedybrand.rebate.repo.ITransactionRepo;
+import com.speedybrand.rebate.service.IClaimService;
 import com.speedybrand.rebate.utils.CommonUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
-public class ClaimService {
+public class ClaimService implements IClaimService {
 
     private final IClaimRepo claimRepo;
     private final ITransactionRepo transactionRepo;
@@ -27,6 +27,7 @@ public class ClaimService {
         this.rebateProgramRepo = rebateProgramRepo;
     }
 
+    @Override
     public Claim createClaim(final String transactionId) {
         final Transaction transaction = transactionRepo.get(transactionId);
         final RebateProgram rebateProgram = rebateProgramRepo.get(transaction.getRebateProgramId());

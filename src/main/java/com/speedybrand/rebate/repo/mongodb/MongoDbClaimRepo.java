@@ -36,7 +36,7 @@ public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaim
     }
 
     @Override
-    public List<Statistics> getClaimAggrigattionReport(final LocalDateTime from, final LocalDateTime to) {
+    public List<Statistics> getClaimAggregationReport(final LocalDateTime from, final LocalDateTime to) {
         final Bson match = Aggregates.match(Filters.and(Filters.gte("claimDate", from),
                 Filters.lte("claimDate", to)));
         final Bson group = Aggregates.group("$status",

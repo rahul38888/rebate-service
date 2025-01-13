@@ -1,10 +1,10 @@
 package com.speedybrand.rebate.controller;
 
 import com.speedybrand.rebate.models.responses.ClaimReportResponse;
-import com.speedybrand.rebate.service.ReportService;
+import com.speedybrand.rebate.service.IReportService;
+import com.speedybrand.rebate.service.impls.ReportService;
 import com.speedybrand.rebate.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ public class ReportController {
     public static final String ROOT_PATH = "/report";
     public static final String CLAIMS_PATH = "/claims";
 
-    private final ReportService service;
+    private final IReportService service;
 
     @Autowired
-    public ReportController(final ReportService service) {
+    public ReportController(final IReportService service) {
         this.service = service;
     }
 

@@ -3,7 +3,8 @@ package com.speedybrand.rebate.controller;
 import com.speedybrand.rebate.models.requests.TransactionRequest;
 import com.speedybrand.rebate.models.responses.TransactionResponse;
 import com.speedybrand.rebate.pojo.Transaction;
-import com.speedybrand.rebate.service.TransactionService;
+import com.speedybrand.rebate.service.ITransactionService;
+import com.speedybrand.rebate.service.impls.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +19,10 @@ public class TransactionController {
     public static final String ROOT_PATH = "/transaction";
     public static final String RECORD_PATH = "/record";
 
-    private final TransactionService service;
+    private final ITransactionService service;
 
     @Autowired
-    public TransactionController(final TransactionService service) {
+    public TransactionController(final ITransactionService service) {
         this.service = service;
     }
 

@@ -1,17 +1,18 @@
-package com.speedybrand.rebate.service;
+package com.speedybrand.rebate.service.impls;
 
 import com.speedybrand.rebate.models.requests.TransactionRequest;
 import com.speedybrand.rebate.pojo.RebateProgram;
 import com.speedybrand.rebate.pojo.Transaction;
 import com.speedybrand.rebate.repo.IRebateProgramRepo;
 import com.speedybrand.rebate.repo.ITransactionRepo;
+import com.speedybrand.rebate.service.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-public class TransactionService {
+public class TransactionService implements ITransactionService {
 
     private final IRebateProgramRepo rebateProgramRepo;
     private final ITransactionRepo transactionRepo;
@@ -22,6 +23,7 @@ public class TransactionService {
         this.transactionRepo = transactionRepo;
     }
 
+    @Override
     public Transaction recordTransaction(final TransactionRequest transaction) {
         if (!isValid(transaction)) {
             // TODO: Throw exception

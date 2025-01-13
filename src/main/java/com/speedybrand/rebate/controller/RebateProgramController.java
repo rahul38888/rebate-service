@@ -3,9 +3,10 @@ package com.speedybrand.rebate.controller;
 import com.speedybrand.rebate.models.requests.RebateProgramRequest;
 import com.speedybrand.rebate.models.responses.RebateCalculation;
 import com.speedybrand.rebate.models.responses.RebateProgramResponse;
+import com.speedybrand.rebate.service.IRebateProgramService;
 import com.speedybrand.rebate.utils.CommonUtil;
 import com.speedybrand.rebate.pojo.RebateProgram;
-import com.speedybrand.rebate.service.RebateProgramService;
+import com.speedybrand.rebate.service.impls.RebateProgramService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,10 @@ public class RebateProgramController {
     public static final String CREATE_PATH = "/create";
     public static final String CALCULATE_PATH = "/calculate/{transactionId}";
 
-    private final RebateProgramService service;
+    private final IRebateProgramService service;
 
     @Autowired
-    public RebateProgramController(final RebateProgramService service) {
+    public RebateProgramController(final IRebateProgramService service) {
         this.service = service;
     }
 

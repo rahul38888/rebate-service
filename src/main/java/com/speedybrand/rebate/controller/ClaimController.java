@@ -2,7 +2,8 @@ package com.speedybrand.rebate.controller;
 
 import com.speedybrand.rebate.models.responses.ClaimResponse;
 import com.speedybrand.rebate.pojo.Claim;
-import com.speedybrand.rebate.service.ClaimService;
+import com.speedybrand.rebate.service.IClaimService;
+import com.speedybrand.rebate.service.impls.ClaimService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +16,10 @@ public class ClaimController {
     public static final String ROOT_PATH = "/claim";
     public static final String CREATE_PATH = "/create";
 
-    private final ClaimService service;
+    private final IClaimService service;
 
     @Autowired
-    public ClaimController(final ClaimService service) {
+    public ClaimController(final IClaimService service) {
         this.service = service;
     }
 

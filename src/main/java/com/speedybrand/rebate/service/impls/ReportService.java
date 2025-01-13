@@ -1,10 +1,11 @@
-package com.speedybrand.rebate.service;
+package com.speedybrand.rebate.service.impls;
 
 import com.speedybrand.rebate.models.responses.ClaimReportResponse;
 import com.speedybrand.rebate.models.responses.StatisticsResponse;
 import com.speedybrand.rebate.pojo.Statistics;
 import com.speedybrand.rebate.pojo.ClaimStatus;
 import com.speedybrand.rebate.repo.IClaimRepo;
+import com.speedybrand.rebate.service.IReportService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ReportService {
+public class ReportService implements IReportService {
 
     private final IClaimRepo claimRepo;
 
@@ -22,8 +23,9 @@ public class ReportService {
     }
 
 
+    @Override
     public ClaimReportResponse getClaimsReport(final LocalDateTime from, final LocalDateTime to) {
-        final List<Statistics> claimStats = claimRepo.getClaimAggrigattionReport(from, to);
+        final List<Statistics> claimStats = claimRepo.getClaimAggregationReport(from, to);
 
         final Map<ClaimStatus, StatisticsResponse> claimStatsMap = new HashMap<>();
         final StatisticsResponse overalls = StatisticsResponse.builder()
