@@ -11,19 +11,18 @@ import com.speedybrand.rebate.pojo.Claim;
 import com.speedybrand.rebate.pojo.ClaimStatus;
 import com.speedybrand.rebate.pojo.Statistics;
 import com.speedybrand.rebate.repo.IClaimRepo;
-import com.speedybrand.rebate.repo.mongodb.condition.MongoDbEnabled;
 import com.speedybrand.rebate.repo.mongodb.config.MongoDbConfiguration;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-@Conditional(MongoDbEnabled.class)
+@ConditionalOnProperty(name = "database", havingValue = "mongodb")
 public class MongoDbClaimRepo extends MongoDbRepository<Claim> implements IClaimRepo {
 
     private static final String DOLLAR = "$";

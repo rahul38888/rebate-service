@@ -2,18 +2,31 @@
 ## Introduction
 This is a basic rebate management system that can handle rebate program data, calculates rebates, and provides endpoints for basic reporting.
 
+## Tl;dr
+1. Refer to [How to set up and run](#How-to-set-up-and-run) to set up application locally
+2. Then refer to [Using postman collection](#Using-postman-collection) to use APIs in Postman
+
 ## Features
-| Feature               | Endpoint                                           | Description                                                                                                                                                                                                      |
-|-----------------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Create Rebate Program | POST {{host}}/rebate/create                        | An endpoint to create a new rebate program with all relevant details                                                                                                                                             |
-| Get Rebate Program    | GET {{host}}/rebate/\<rebate_program_id\>          | An endpoint to get rebate program by id with all relevant details                                                                                                                                                |
-| Record Transaction    | POST {{host}}/transaction/record                   | An endpoint to record a new transaction that could be eligible for a rebate                                                                                                                                      |
-| Calculate Rebate      | GET {{host}}/rebate/calculate/\<transaction_id\>   | An endpoint to calculate the rebate amount for a given transaction based on the associated rebate program                                                                                                        |
-| Create Claim          | POST {{host}}/claim/create?tid=\<transaction_id\>  | An endpoint to create a claim for a transaction, marking the status as "pending"                                                                                                                                 |
-| Get Claim details     | GET {{host}}/claim/\<claimId\>                     | An endpoint to fetch a rebate claim by claim id                                                                                                                                                                  |
-| Approve a claim       | PUT {{host}}/claim/\<claimId\>/approve             | An endpoint to approve a claim, marking the status as "approved".<br/>This will only pass if claim is in pending state.                                                                                          |
-| Reject a claim        | PUT {{host}}/claim/\<claimId\>/reject              | An endpoint to reject a claim, marking the status as "rejected".<br/>This will only pass if claim is in pending state.                                                                                           |
-| Reporting             | GET {{host}}/report/claims?from=\<from\>&to=\<to\> | An endpoint that returns a summary of total rebate claims and the amount approved for a given time period<br/>Both dates should be url-encoded in ISO_LOCAL_DATE_TIME format (eg. 2024-01-13T00:04:01.546+00:00) |
+| Feature               | Endpoint                                           | Description                                                                                                                                                                                                          |
+|-----------------------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Create Rebate Program | POST {{host}}/rebate/create                        | An endpoint to create a new rebate program with all relevant details                                                                                                                                                 |
+| Get Rebate Program    | GET {{host}}/rebate/\<rebate_program_id\>          | An endpoint to get rebate program by id with all relevant details                                                                                                                                                    |
+| Record Transaction    | POST {{host}}/transaction/record                   | An endpoint to record a new transaction that could be eligible for a rebate                                                                                                                                          |
+| Calculate Rebate      | GET {{host}}/rebate/calculate/\<transaction_id\>   | An endpoint to calculate the rebate amount for a given transaction based on the associated rebate program                                                                                                            |
+| Create Claim          | POST {{host}}/claim/create?tid=\<transaction_id\>  | An endpoint to create a claim for a transaction, marking the status as "pending"                                                                                                                                     |
+| Get Claim details     | GET {{host}}/claim/\<claimId\>                     | An endpoint to fetch a rebate claim by claim id                                                                                                                                                                      |
+| Approve a claim       | PUT {{host}}/claim/\<claimId\>/approve             | An endpoint to approve a claim, marking the status as "approved".<br/>This will only pass if claim is in pending state.                                                                                              |
+| Reject a claim        | PUT {{host}}/claim/\<claimId\>/reject              | An endpoint to reject a claim, marking the status as "rejected".<br/>This will only pass if claim is in pending state.                                                                                               |
+| Reporting             | GET {{host}}/report/claims?from=\<from\>&to=\<to\> | An endpoint that returns a summary of total rebate claims and the amount approved for a given time period<br/>Both dates should be url-encoded in `ISO_LOCAL_DATE_TIME` format (Ex. `2024-01-13T00:04:01.546+00:00`) |
+
+| **Other Features**          | Note                                                                                                                                                                                                     |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Caching                     | Spring caching annotations has been used to enable caching when fetching rebate program or transactions from repository.<br/>Claims data has not been cached as it is suppose to change                  |
+| Configurable                | The application is somewhat configurable. I am using Spring `@Value` annotations to load application configuration from [application.properties](src/main/resources/application.properties)              |
+| Docker Compose              | You can run application in a local docker env by running `make run-all` in project directory. Refer to [Option 2](#option-2-run-application-in-docker-with-mongodb-server-running-in-container) for more |
+| Error Handling & Validation | Proper input validation and error handling has been implemented.                                                                                                                                         |
+| Logging                     | Proper logging has been implemented for debugging                                                                                                                                                        |
+| Class diagram               | To learn about module and java classes refer to [Class Diagram](#Class-Diagram) section                                                                                                                  |
 
 ## Version information
 ```text
@@ -78,3 +91,21 @@ You need not build this connection string. Just go to Connect -> Java on Atlas c
 
 ## Class Diagram
 [![Class digram](documentation/class_diagram.svg)](documentation/class_diagram.svg)
+
+## Using postman collection
+The postman collection and environment export files are present in [here](documentation/postman).
+The collection is exported using v2.1 format and can be imported into postman. If you are using Insomnia or some other API platform application you might require to do extra steps to import it.
+
+### Postman API tree structure:
+
+![Post-collection-structure.jpg](documentation/postman/Post-collection-structure.jpg)
+
+Environment is named **local** and just contain `host` as the only required variable. If you want to create your own environment make suer to initialize this.
+
+### API workflow
+![API workflow.svg](documentation/API%20workflow.svg)
+
+**Note**: You need not copy ids between API calls. I have used Postman's Post-result feature to automate ID capturing on each create/report request as env variables.
+These env variable will be used in next API.
+
+When using Claim Reporting API make sure that you url-encoded dates in `ISO_LOCAL_DATE_TIME` format (Ex. `2024-01-13T00:04:01.546+00:00`)

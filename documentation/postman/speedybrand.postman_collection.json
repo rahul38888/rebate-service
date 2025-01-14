@@ -220,10 +220,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"First request\", function() {\r",
-									"    let headerValue = pm.response.headers.get(\"id\");\r",
-									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -259,10 +256,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"First request\", function() {\r",
-									"    let headerValue = pm.response.headers.get(\"id\");\r",
-									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -299,10 +293,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"First request\", function() {\r",
-									"    let headerValue = pm.response.headers.get(\"id\");\r",
-									"    pm.environment.set(\"CLAIM_ID\", headerValue);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
