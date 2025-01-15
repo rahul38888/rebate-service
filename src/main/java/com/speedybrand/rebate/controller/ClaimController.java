@@ -79,7 +79,7 @@ public class ClaimController {
 
     @PutMapping(value = ClaimController.APPROVE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<UniversalResponse<Void>> claimApprove(@PathVariable final String claimId) {
+    public ResponseEntity<UniversalResponse<Void>> approveClaim(@PathVariable final String claimId) {
         try {
             service.approve(claimId);
             return ResponseEntity.status(HttpStatus.OK)
@@ -97,7 +97,7 @@ public class ClaimController {
 
     @PutMapping(value = ClaimController.REJECT_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<UniversalResponse<Void>> claimReject(@PathVariable final String claimId) {
+    public ResponseEntity<UniversalResponse<Void>> rejectClim(@PathVariable final String claimId) {
         try {
             service.reject(claimId);
             return ResponseEntity.status(HttpStatus.OK)

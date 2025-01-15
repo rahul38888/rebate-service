@@ -3,6 +3,7 @@ package com.speedybrand.rebate.service.impls;
 import com.mongodb.client.model.Filters;
 import com.speedybrand.rebate.exceptions.EntityNotFoundException;
 import com.speedybrand.rebate.exceptions.InputValidationException;
+import com.speedybrand.rebate.exceptions.InvalidDatabaseStateException;
 import com.speedybrand.rebate.exceptions.UpdateFailureException;
 import com.speedybrand.rebate.pojo.Claim;
 import com.speedybrand.rebate.pojo.ClaimStatus;
@@ -57,10 +58,16 @@ public class ClaimService implements IClaimService {
 
         final RebateProgram rebateProgram = rebateProgramRepo.get(transaction.getRebateProgramId());
         if (Objects.isNull(rebateProgram)) {
-            LOGGER.error("Rebate program for transaction not found, transactionId = {}, rebateProgramId = {}",
-                    transactionId, transaction.getRebateProgramId());
-            throw new InputValidationException(Map.of(CommonUtil.TRANSACTION_ID, transactionId,
-                    CommonUtil.REBATE_PROGRAM_ID, transaction.getRebateProgramId()), null);
+            LOGGER.error("ALERT: Incorrect rebate program found for transaction, id = {}",
+                    transaction.getRebateProgramId());
+            throw new InvalidDatabaseStateException(null);
+        }
+
+        if (transaction.getTransactionDate().isBefore(rebateProgram.getStartDate()) ||
+                transaction.getTransactionDate().isAfter(rebateProgram.getEndDate())) {
+            LOGGER.error("ALERT: Transaction data is out of window, transactionId = {}, rebateProgramId = {}",
+                    transaction.getId(), transaction.getRebateProgramId());
+            throw new InvalidDatabaseStateException(null);
         }
 
         final Claim claim = new Claim();

@@ -13,7 +13,9 @@ public enum HttpErrorStatus {
     UPDATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value() + "_001",
             "Database update failure"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value() + "_002",
-            "Internal server exception");
+            "Internal server exception"),
+    INVALID_DB_STATE_ERROR(HttpStatus.UNPROCESSABLE_ENTITY, HttpStatus.UNPROCESSABLE_ENTITY.value() + "_001",
+            "Failure due to invalid state of DB");
 
     private final HttpStatus status;
     private final String subStatus;

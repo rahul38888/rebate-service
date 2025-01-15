@@ -1,6 +1,8 @@
 package com.speedybrand.rebate.service.impls;
 
 import com.speedybrand.rebate.exceptions.EntityNotFoundException;
+import com.speedybrand.rebate.exceptions.InputValidationException;
+import com.speedybrand.rebate.exceptions.InvalidDatabaseStateException;
 import com.speedybrand.rebate.models.requests.RebateProgramRequest;
 import com.speedybrand.rebate.models.responses.RebateCalculation;
 import com.speedybrand.rebate.models.responses.RebateProgramResponse;
@@ -51,15 +53,21 @@ public class RebateProgramService implements IRebateProgramService {
     public RebateCalculation calculateRebate(final String transactionId) {
         final Transaction transaction = transactionRepo.get(transactionId);
         if (Objects.isNull(transaction)) {
-            LOGGER.error("Invalid transaction id, id = {}", transactionId);
+            LOGGER.error("Invalid transaction passed, id = {}", transactionId);
             throw new EntityNotFoundException(Map.of(CommonUtil.TRANSACTION_ID, transactionId), null);
         }
         final RebateProgram rebateProgram = getRebateProgram(transaction.getRebateProgramId());
         if (Objects.isNull(rebateProgram)) {
-            LOGGER.error("Incorrect related rebate program id found in database, id = {}",
+            LOGGER.error("ALERT: Incorrect rebate program found for transaction, id = {}",
                     transaction.getRebateProgramId());
-            throw new EntityNotFoundException(Map.of(CommonUtil.TRANSACTION_ID, transactionId,
-                    CommonUtil.REBATE_PROGRAM_ID, transaction.getRebateProgramId()), null);
+            throw new InvalidDatabaseStateException(null);
+        }
+
+        if (transaction.getTransactionDate().isBefore(rebateProgram.getStartDate()) ||
+                transaction.getTransactionDate().isAfter(rebateProgram.getEndDate())) {
+            LOGGER.error("ALERT: Transaction data is out of window, transactionId = {}, rebateProgramId = {}",
+                    transaction.getId(), transaction.getRebateProgramId());
+            throw new InvalidDatabaseStateException(null);
         }
 
         return RebateCalculation.builder()
